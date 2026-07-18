@@ -34,7 +34,7 @@ add_executable(GameEngine
     src/main.cpp
 
     external/stb/stb_image.cpp
- "src/core/window_manager.h" "src/core/window_manager.cpp")
+ "src/core/window_manager.h" "src/core/window_manager.cpp" "src/renderer/shader/shader.cpp" "src/renderer/shader/shader.h")
 
 target_include_directories(GameEngine PRIVATE
     ${CMAKE_SOURCE_DIR}
@@ -90,4 +90,11 @@ add_custom_command(
         "$<TARGET_FILE_DIR:GameEngine>/resources"
 
     COMMENT "Copying resources to executable directory"
+)
+
+add_custom_command(
+    TARGET GameEngine POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/src/renderer/shader"
+        "$<TARGET_FILE_DIR:GameEngine>/renderer/shader"
 )
