@@ -2,7 +2,7 @@
 
 
 
-EBO::EBO(const GLuint* indices, GLsizeiptr size) {
+void EBO::Upload(const GLuint* indices, GLsizeiptr size) {
 
     glGenBuffers(1, &ID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);

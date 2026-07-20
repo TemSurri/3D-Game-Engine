@@ -1,12 +1,6 @@
 #include "vao.h";
 
 
-
-
-VAO::VAO() {
-    glGenVertexArrays(1, &ID);
-};
-
 VAO::~VAO() {
 
     if (ID != 0)
@@ -24,6 +18,10 @@ void::VAO::LinkAttrib(const VBO& vbo, GLuint layout, GLuint numComponenets, GLen
     glEnableVertexAttribArray(layout);
 
 };
+
+void VAO::Create() {
+    glGenVertexArrays(1, &ID);
+}
 
 void VAO::Bind() {
     glBindVertexArray(ID);

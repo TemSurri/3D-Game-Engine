@@ -10,7 +10,7 @@ class VAO {
 public:
 	GLuint ID{};
 
-	VAO();
+	VAO() {};
 	~VAO();
 
 	//delete all copy constructors
@@ -41,6 +41,7 @@ public:
 		return *this;
 	};
 
+	void Create();
 	void LinkAttrib(const VBO& vbo, GLuint layout, GLuint numComponenets, GLenum type, GLsizei stride, const void* offset);
 	void Bind();
 	void Unbind();

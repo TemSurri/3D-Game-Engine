@@ -37,7 +37,7 @@ add_executable(GameEngine
 #core
  "src/core/window_manager.h" "src/core/window_manager.cpp" 
 #renderer
- "src/renderer/shader/shader.cpp" "src/renderer/gl_resources/ebo.cpp" "src/renderer/gl_resources/vao.cpp" "src/renderer/gl_resources/vbo.cpp")
+ "src/renderer/shader/shader.cpp" "src/renderer/gl_resources/ebo.cpp" "src/renderer/gl_resources/vao.cpp" "src/renderer/gl_resources/vbo.cpp" "src/renderer/mesh.cpp")
 
 target_include_directories(GameEngine PRIVATE
     ${CMAKE_SOURCE_DIR}

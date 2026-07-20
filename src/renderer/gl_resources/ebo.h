@@ -6,7 +6,7 @@ class EBO {
 public:
 	GLuint ID{};
 
-	EBO(const GLuint* indices, GLsizeiptr size);
+	EBO() {};
 	~EBO();
 
 	//delete all copy constructors
@@ -37,6 +37,7 @@ public:
 		return *this;
 	};
 
+	void Upload(const GLuint* indices, GLsizeiptr size);
 	void Bind();
 	void Unbind();
 	void Delete();

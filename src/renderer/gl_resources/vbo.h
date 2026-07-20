@@ -8,7 +8,11 @@ class VBO {
 public:
 	GLuint ID{};
 
-	VBO(const void* data, GLsizeiptr size);
+	VBO() 
+	{
+
+	};
+
 	~VBO();
 
 	//delete all copy constructors
@@ -39,7 +43,7 @@ public:
 		return *this;
 	};
 
-
+	void Upload (const void* data, GLsizeiptr size);
 	void Bind() const;
 	void Unbind();
 	void Delete();
