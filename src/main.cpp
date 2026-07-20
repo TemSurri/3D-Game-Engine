@@ -1,7 +1,7 @@
 #include "core/window_manager.h"
 #include "renderer/mesh.h"
 #include "renderer/shader/shader.h"
-
+#include "renderer/transform.h"
 
 int main()
 {
@@ -41,17 +41,44 @@ int main()
     m.addTriangle(3, 0, 1);
     m.initGLResources();
 
-
     Shader shaderColor = Shader("renderer/shader/color.vert", "renderer/shader/color.frag");
     shaderColor.Activate();
     m.vao.Bind();
+
+
+    Transform transform;
+
+
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        shaderColor.setMat4(
+            "model",
+            transform.getModelMatrix()
+        );
+        const float movementSpeed = 0.001f;
 
-      
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        {
+            transform.position.y += movementSpeed;
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        {
+            transform.position.y -= movementSpeed;
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        {
+            transform.position.x -= movementSpeed;
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        {
+            transform.position.x += movementSpeed;
+        }
 
         
         glDrawElements(

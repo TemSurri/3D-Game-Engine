@@ -3,6 +3,8 @@
 
 #include <glad/glad.h>
 #include <string>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class Shader
 {
@@ -82,6 +84,9 @@ public:
             ID = 0;
         }
     }
+
+    // set the uniform within the shader
+    void setMat4(const std::string& name, const glm::mat4& matrix);
 
 private:
     static std::string readFile(const char* filepath);

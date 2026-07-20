@@ -37,12 +37,13 @@ add_executable(GameEngine
 #core
  "src/core/window_manager.h" "src/core/window_manager.cpp" 
 #renderer
- "src/renderer/shader/shader.cpp" "src/renderer/gl_resources/ebo.cpp" "src/renderer/gl_resources/vao.cpp" "src/renderer/gl_resources/vbo.cpp" "src/renderer/mesh.cpp")
+ "src/renderer/shader/shader.cpp" "src/renderer/gl_resources/ebo.cpp" "src/renderer/gl_resources/vao.cpp" "src/renderer/gl_resources/vbo.cpp" "src/renderer/mesh.cpp" "src/renderer/transform.cpp")
 
 target_include_directories(GameEngine PRIVATE
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/external/stb
+    ${CMAKE_SOURCE_DIR}/external/glm
 )
 
 # Platform-specific OpenGL libraries
@@ -101,3 +102,4 @@ add_custom_command(
         "${CMAKE_SOURCE_DIR}/src/renderer/shader"
         "$<TARGET_FILE_DIR:GameEngine>/renderer/shader"
 )
+
