@@ -23,7 +23,7 @@ add_subdirectory(external/glfw/glfw-3.4)
 
 add_library(glad STATIC
     external/glad/src/glad.c
- )
+  )
 
 target_include_directories(glad PUBLIC
     external/glad/include
@@ -37,7 +37,10 @@ add_executable(GameEngine
 #core
  "src/core/window_manager.h" "src/core/window_manager.cpp" 
 #renderer
- "src/renderer/shader/shader.cpp" "src/renderer/gl_resources/ebo.cpp" "src/renderer/gl_resources/vao.cpp" "src/renderer/gl_resources/vbo.cpp" "src/renderer/mesh.cpp" "src/renderer/transform.cpp")
+ "src/renderer/shader/shader.cpp" "src/renderer/gl_resources/ebo.cpp" 
+ "src/renderer/gl_resources/vao.cpp" "src/renderer/gl_resources/vbo.cpp"
+ "src/renderer/model/mesh.cpp" "src/renderer/model/transform.cpp"
+ "src/renderer/model/model.cpp" "src/renderer/camera/camera.cpp")
 
 target_include_directories(GameEngine PRIVATE
     ${CMAKE_SOURCE_DIR}

@@ -1,8 +1,7 @@
 #include "core/window_manager.h"
-#include "renderer/model/mesh.h"
 #include "renderer/shader/shader.h"
-#include "renderer/model/transform.h"
 #include "renderer/model/model.h"
+#include "renderer/camera/camera.h"
 
 int main()
 {
@@ -105,39 +104,7 @@ int main()
 
 
     //PROJ and VIEW
-
-    glm::mat4 proj = glm::mat4(1.0f);
-    glm::mat4 view = glm::mat4(1.0f);
-    proj = glm::perspective(glm::radians(45.0f), float(800.0f / 800.0f), 0.1f, 100.0f);
-    view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
-
-    const GLint projlocation = glGetUniformLocation(
-        shaderColor.ID,
-        "proj"
-    );
-
-    glUniformMatrix4fv(
-        projlocation,
-        1,
-        GL_FALSE,
-        glm::value_ptr(proj)
-    );
-
-    const GLint viewlocation = glGetUniformLocation(
-        shaderColor.ID,
-        "view"
-    );
-
-    glUniformMatrix4fv(
-        viewlocation,
-        1,
-        GL_FALSE,
-        glm::value_ptr(view)
-    );
-
-
-
-
+    Camera cam = Camera();
     //model testing
 
     Model cube1 = Model();
@@ -151,10 +118,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
         
-        const float movementSpeed = 0.001f;
+        const float movementSpeed = 0.0005f;
         const float rotateSpeed = 0.004f;
-
-        cube1.render(shaderColor);
 
         //rotation
         if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
@@ -170,41 +135,85 @@ int main()
             cube1.transform.rotation.z += rotateSpeed;
         }
 
-        //translation
+        // Camera movement
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         {
-            cube1.transform.position.y += movementSpeed;
+            cam.pos += cam.front * movementSpeed;
         }
-
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         {
-            cube1.transform.position.y -= movementSpeed;
+            cam.pos -= cam.front * movementSpeed;
         }
-
+        glm::vec3 right = glm::normalize(glm::cross(cam.front, cam.up));
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         {
-            cube1.transform.position.x -= movementSpeed;
+            cam.pos -= right * movementSpeed;
         }
-
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         {
-            cube1.transform.position.x += movementSpeed;
+            cam.pos += right * movementSpeed;
         }
-
-        if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
         {
-            cube1.transform.position.z -= movementSpeed;
+            cam.pos += cam.up * movementSpeed;
         }
-
-        if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
         {
-            cube1.transform.position.z += movementSpeed;
+            cam.pos -= cam.up * movementSpeed;
+        }
+        const float lookSpeed = 70.0f * 0.0002;
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+        {
+            cam.yaw -= lookSpeed;
+        }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        {
+            cam.yaw += lookSpeed;
+        }
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+        {
+            cam.pitch += lookSpeed;
+        }
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        {
+            cam.pitch -= lookSpeed;
+        }
+        cam.pitch = glm::clamp(cam.pitch, -89.0f, 89.0f);
+        cam.updateDirection();
+        
+        
+        int framebufferWidth = 0;
+        int framebufferHeight = 0;
+
+        glfwGetFramebufferSize(
+            window,
+            &framebufferWidth,
+            &framebufferHeight
+        );
+
+        if (framebufferWidth > 0 && framebufferHeight > 0)
+        {
+            glViewport(
+                0,
+                0,
+                framebufferWidth,
+                framebufferHeight
+            );
+
+            const float aspectRatio =
+                static_cast<float>(framebufferWidth) /
+                static_cast<float>(framebufferHeight);
+
+            shaderColor.setMat4(
+                "proj",
+                cam.getProjectionMatrix(aspectRatio)
+            );
         }
 
-
-        
-       
-        
+        shaderColor.setMat4(
+            "view", cam.getViewMatrix()
+        );
+        cube1.render(shaderColor);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
