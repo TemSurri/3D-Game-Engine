@@ -1,7 +1,8 @@
 #include "core/window_manager.h"
-#include "renderer/mesh.h"
+#include "renderer/model/mesh.h"
 #include "renderer/shader/shader.h"
-#include "renderer/transform.h"
+#include "renderer/model/transform.h"
+#include "renderer/model/model.h"
 
 int main()
 {
@@ -107,7 +108,7 @@ int main()
 
     glm::mat4 proj = glm::mat4(1.0f);
     glm::mat4 view = glm::mat4(1.0f);
-    proj = glm::perspective(glm::radians(45.0f), float(800 / 800), 0.1f, 100.0f);
+    proj = glm::perspective(glm::radians(45.0f), float(800.0f / 800.0f), 0.1f, 100.0f);
     view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
 
     const GLint projlocation = glGetUniformLocation(
@@ -137,89 +138,72 @@ int main()
 
 
 
+    //model testing
+
+    Model cube1 = Model();
+    cube1.mesh = &m;
+
     glEnable(GL_DEPTH_TEST);
-
-
-
-
-
-
 
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
-        shaderColor.setMat4(
-            "model",
-            transform.getModelMatrix()
-        );
+        
         const float movementSpeed = 0.001f;
         const float rotateSpeed = 0.004f;
 
-
+        cube1.render(shaderColor);
 
         //rotation
         if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
         {
-            transform.rotation.x += rotateSpeed;
+            cube1.transform.rotation.x += rotateSpeed;
         }
         if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
         {
-            transform.rotation.y += rotateSpeed;
+            cube1.transform.rotation.y += rotateSpeed;
         }
         if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
         {
-            transform.rotation.z += rotateSpeed;
+            cube1.transform.rotation.z += rotateSpeed;
         }
-
-
-
-
-
-
-
-
 
         //translation
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         {
-            transform.position.y += movementSpeed;
+            cube1.transform.position.y += movementSpeed;
         }
 
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         {
-            transform.position.y -= movementSpeed;
+            cube1.transform.position.y -= movementSpeed;
         }
 
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         {
-            transform.position.x -= movementSpeed;
+            cube1.transform.position.x -= movementSpeed;
         }
 
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         {
-            transform.position.x += movementSpeed;
+            cube1.transform.position.x += movementSpeed;
         }
 
         if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
         {
-            transform.position.z -= movementSpeed;
+            cube1.transform.position.z -= movementSpeed;
         }
 
         if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
         {
-            transform.position.z += movementSpeed;
+            cube1.transform.position.z += movementSpeed;
         }
 
 
         
-        glDrawElements(
-            GL_TRIANGLES,
-            36,
-            GL_UNSIGNED_INT,
-            nullptr
-        );
+       
         
 
         glfwSwapBuffers(window);

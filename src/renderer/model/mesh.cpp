@@ -80,3 +80,24 @@ void Mesh::initGLResources() {
     vbo.Unbind();
     ebo.Unbind();
 }
+
+void Mesh::draw() {
+
+    //TODO
+    //error check to see if initialized and drawable
+
+
+    vao.Bind();
+
+    glDrawElements(
+        GL_TRIANGLES,
+        indices.size(),
+        GL_UNSIGNED_INT,
+        nullptr
+    );
+
+    vao.Unbind();
+
+
+
+};

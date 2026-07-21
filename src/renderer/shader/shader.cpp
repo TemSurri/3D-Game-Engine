@@ -48,7 +48,7 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile) {
 }
 
 void Shader::setMat4(const std::string& name, const glm::mat4& matrix
-) {
+) const {
     const GLint location = glGetUniformLocation(
         ID,
         name.c_str()

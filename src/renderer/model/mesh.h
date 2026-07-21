@@ -1,9 +1,12 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <cstddef>
-#include "gl_resources/ebo.h"
-#include "gl_resources/vbo.h"
-#include "gl_resources/vao.h"
+#include "../gl_resources/ebo.h"
+#include "../gl_resources/vbo.h"
+#include "../gl_resources/vao.h"
+#include "../shader/shader.h"
 
 
 struct Vertex {
@@ -41,4 +44,6 @@ public:
 	);
 	void addVertex(const Vertex& v);
 	void initGLResources();
+
+	void draw();
 };

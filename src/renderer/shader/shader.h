@@ -86,7 +86,7 @@ public:
     }
 
     // set the uniform within the shader
-    void setMat4(const std::string& name, const glm::mat4& matrix);
+    void setMat4(const std::string& name, const glm::mat4& matrix) const;
 
 private:
     static std::string readFile(const char* filepath);
