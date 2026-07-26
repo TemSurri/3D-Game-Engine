@@ -2,6 +2,7 @@
 #include "renderer/shader/shader.h"
 #include "renderer/model/model.h"
 #include "renderer/camera/camera.h"
+#include "renderer/renderer.h"
 
 int main()
 {
@@ -23,12 +24,12 @@ int main()
 
     Vertex v1{
          0.3f, -0.3f,  0.3f,
-         0.0f,  1.0f,  0.0f
+         1.0f,  0.0f,  0.0f
     };
 
     Vertex v2{
          0.3f,  0.3f,  0.3f,
-         0.0f,  0.0f,  1.0f
+         1.0f,  0.0f,  0.0f
     };
 
     Vertex v3{
@@ -96,19 +97,35 @@ int main()
 
     //SHADER CREATION
     Shader shaderColor = Shader("renderer/shader/color.vert", "renderer/shader/color.frag");
-    shaderColor.Activate();
-    m.vao.Bind();
 
     //TRANSFROM CREATION
     Transform transform;
-
 
     //PROJ and VIEW
     Camera cam = Camera();
     //model testing
 
+
+    Material mat;
+    mat.shader = &shaderColor;
+
+
+
+
     Model cube1 = Model();
     cube1.mesh = &m;
+    cube1.mat = &mat;
+
+
+
+
+
+    Renderer renderer = Renderer();
+
+    renderer.current_cam = &cam;
+    renderer.window = &(*window);
+
+
 
     glEnable(GL_DEPTH_TEST);
 
@@ -181,39 +198,7 @@ int main()
         cam.pitch = glm::clamp(cam.pitch, -89.0f, 89.0f);
         cam.updateDirection();
         
-        
-        int framebufferWidth = 0;
-        int framebufferHeight = 0;
-
-        glfwGetFramebufferSize(
-            window,
-            &framebufferWidth,
-            &framebufferHeight
-        );
-
-        if (framebufferWidth > 0 && framebufferHeight > 0)
-        {
-            glViewport(
-                0,
-                0,
-                framebufferWidth,
-                framebufferHeight
-            );
-
-            const float aspectRatio =
-                static_cast<float>(framebufferWidth) /
-                static_cast<float>(framebufferHeight);
-
-            shaderColor.setMat4(
-                "proj",
-                cam.getProjectionMatrix(aspectRatio)
-            );
-        }
-
-        shaderColor.setMat4(
-            "view", cam.getViewMatrix()
-        );
-        cube1.render(shaderColor);
+        renderer.renderModel(cube1);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

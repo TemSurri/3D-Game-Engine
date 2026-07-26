@@ -1,11 +1,12 @@
 #include "model.h"
 
-void Model::render(const Shader& shader) const {
+void Model::render() const {
 
-    shader.setMat4(
-        "model",
-        transform.getModelMatrix()
-    );
+	//gotta do better error checking later
+	if (!(mat || mesh)) {
+		
+		return;
+	}
 
 	mesh->draw();
 
