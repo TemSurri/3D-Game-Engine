@@ -61,3 +61,15 @@ void Shader::setMat4(const std::string& name, const glm::mat4& matrix
         glm::value_ptr(matrix)
     );
 }
+
+void Shader::setTex(const Tex& tex) const {
+
+    GLint location = glGetUniformLocation(
+        ID,
+        "tex0"
+    );
+
+    glUniform1i(location, 0);
+    
+    
+};

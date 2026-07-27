@@ -1,8 +1,8 @@
 #pragma once
 
-#include "mesh.h"
-#include "material.h"
-#include "transform.h"
+#include "mesh/mesh.h"
+#include "mat/material.h"
+#include "transform/transform.h"
 
 class Model {
 

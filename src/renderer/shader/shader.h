@@ -1,10 +1,11 @@
 #pragma once
-#pragma once
 
 #include <glad/glad.h>
 #include <string>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "../gl_resources/texture.h"
 
 class Shader
 {
@@ -87,6 +88,7 @@ public:
 
     // set the uniform within the shader
     void setMat4(const std::string& name, const glm::mat4& matrix) const;
+    void setTex(const Tex& tex) const;
 
 private:
     static std::string readFile(const char* filepath);

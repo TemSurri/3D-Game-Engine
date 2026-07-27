@@ -38,11 +38,11 @@ add_executable(GameEngine
  "src/core/window_manager.h" "src/core/window_manager.cpp" 
 #renderer
  "src/renderer/renderer.cpp"
- "src/renderer/shader/shader.cpp" "src/renderer/gl_resources/ebo.cpp" 
- "src/renderer/gl_resources/vao.cpp" "src/renderer/gl_resources/vbo.cpp"
- "src/renderer/model/mesh.cpp" "src/renderer/model/transform.cpp"
+ "src/renderer/shader/shader.cpp"
+ "src/renderer/gl_resources/ebo.cpp" "src/renderer/gl_resources/vao.cpp" "src/renderer/gl_resources/texture.cpp" "src/renderer/gl_resources/vbo.cpp"
+ "src/renderer/model/mesh/mesh.cpp" "src/renderer/model/transform/transform.cpp"
  "src/renderer/model/model.cpp" "src/renderer/camera/camera.cpp"
- "src/renderer/model/material.cpp")
+ "src/renderer/model/mat/material.cpp")
 
 target_include_directories(GameEngine PRIVATE
     ${CMAKE_SOURCE_DIR}

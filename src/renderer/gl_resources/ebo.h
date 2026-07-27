@@ -14,7 +14,7 @@ public:
 	EBO& operator=(const EBO& other) = delete;
 
 	//create move contrsuctors
-	EBO(EBO& other) noexcept
+	EBO(EBO&& other) noexcept
 		:ID(other.ID)
 	{
 		other.ID = 0;

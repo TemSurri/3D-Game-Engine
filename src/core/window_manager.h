@@ -6,7 +6,7 @@
 class WindowManager {
 
 public:
-	
+
 	GLFWwindow* getWindow();
 
 	void disposeWindow(GLFWwindow* window);

@@ -20,7 +20,7 @@ public:
 	VBO& operator=(const VBO& other) = delete;
 
 	//create move contrsuctors
-	VBO(VBO& other) noexcept
+	VBO(VBO&& other) noexcept
 		:ID(other.ID)
 	{
 		other.ID = 0;

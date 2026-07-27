@@ -3,6 +3,7 @@
 #include "renderer/model/model.h"
 #include "renderer/camera/camera.h"
 #include "renderer/renderer.h"
+#include <stb_image.h>
 
 int main()
 {
@@ -15,116 +16,103 @@ int main()
         return -1;
     }
 
-    //MESH CREATION
-    // Front face vertices
-    Vertex v0{
-        -0.3f, -0.3f,  0.3f,
-         1.0f,  0.0f,  0.0f
-    };
-
-    Vertex v1{
-         0.3f, -0.3f,  0.3f,
-         1.0f,  0.0f,  0.0f
-    };
-
-    Vertex v2{
-         0.3f,  0.3f,  0.3f,
-         1.0f,  0.0f,  0.0f
-    };
-
-    Vertex v3{
-        -0.3f,  0.3f,  0.3f,
-         1.0f,  1.0f,  0.0f
-    };
-
-    // Back face vertices
-    Vertex v4{
-        -0.3f, -0.3f, -0.3f,
-         1.0f,  0.0f,  1.0f
-    };
-
-    Vertex v5{
-         0.3f, -0.3f, -0.3f,
-         0.0f,  1.0f,  1.0f
-    };
-
-    Vertex v6{
-         0.3f,  0.3f, -0.3f,
-         1.0f,  1.0f,  1.0f
-    };
-
-    Vertex v7{
-        -0.3f,  0.3f, -0.3f,
-         0.4f,  0.4f,  0.4f
-    };
-
     Mesh m;
 
-    m.addVertex(v0);
-    m.addVertex(v1);
-    m.addVertex(v2);
-    m.addVertex(v3);
-    m.addVertex(v4);
-    m.addVertex(v5);
-    m.addVertex(v6);
-    m.addVertex(v7);
+    const int stacks = 24;
+    const int slices = 32;
+    const float radius = 0.5f;
+
+    for (int stack = 0; stack <= stacks; stack++)
+    {
+        float v = static_cast<float>(stack) / stacks;
+
+        // 0 -> PI
+        float phi = v * glm::pi<float>();
+
+        for (int slice = 0; slice <= slices; slice++)
+        {
+            float u = static_cast<float>(slice) / slices;
+
+            // 0 -> 2PI
+            float theta = u * glm::two_pi<float>();
+
+            float x = radius * sin(phi) * cos(theta);
+            float y = radius * cos(phi);
+            float z = radius * sin(phi) * sin(theta);
+
+            Vertex vertex{
+                x, y, z,
+
+                // color
+                1.0f, 1.0f, 1.0f,
+
+                // UV
+                u, v
+            };
+
+            m.addVertex(vertex);
+        }
+    }
 
 
-    // Front face
-    m.addTriangle(0, 1, 2);
-    m.addTriangle(2, 3, 0);
+    // Generate triangles
+    for (int stack = 0; stack < stacks; stack++)
+    {
+        for (int slice = 0; slice < slices; slice++)
+        {
+            int current =
+                stack * (slices + 1) + slice;
 
-    // Back face
-    m.addTriangle(5, 4, 7);
-    m.addTriangle(7, 6, 5);
+            int next =
+                current + slices + 1;
 
-    // Left face
-    m.addTriangle(4, 0, 3);
-    m.addTriangle(3, 7, 4);
 
-    // Right face
-    m.addTriangle(1, 5, 6);
-    m.addTriangle(6, 2, 1);
+            // Triangle 1
+            m.addTriangle(
+                current,
+                next,
+                current + 1
+            );
 
-    // Top face
-    m.addTriangle(3, 2, 6);
-    m.addTriangle(6, 7, 3);
+            // Triangle 2
+            m.addTriangle(
+                current + 1,
+                next,
+                next + 1
+            );
+        }
+    }
 
-    // Bottom face
-    m.addTriangle(4, 5, 1);
-    m.addTriangle(1, 0, 4);
     m.initGLResources();
 
-    //SHADER CREATION
-    Shader shaderColor = Shader("renderer/shader/color.vert", "renderer/shader/color.frag");
-
     //TRANSFROM CREATION
+    //shit that provides the actual dimensions
     Transform transform;
 
-    //PROJ and VIEW
+    //CAM CREATION
+    //create Cam, preconfigured view and proj matrix
     Camera cam = Camera();
-    //model testing
 
-
+    //create Mat
+    //owns tex and shader for a model
     Material mat;
-    mat.shader = &shaderColor;
+    Shader texShader = Shader("renderer/shader/tex.vert", "renderer/shader/tex.frag");
+    mat.shader = &texShader;
+    Tex fleshTex = Tex();
+    fleshTex.Create("resources/textures/flesh.jpg");
+    mat.texture = &fleshTex;
 
-
-
-
-    Model cube1 = Model();
-    cube1.mesh = &m;
-    cube1.mat = &mat;
-
-
-
-
-
+    //make renderer
     Renderer renderer = Renderer();
 
     renderer.current_cam = &cam;
     renderer.window = &(*window);
 
+
+    //putting everything together in Model
+    Model cube1 = Model();
+    cube1.mesh = &m;
+    cube1.mat = &mat;
 
 
     glEnable(GL_DEPTH_TEST);
@@ -204,11 +192,6 @@ int main()
         glfwPollEvents();
     }
 
-
-
-
-
-    shaderColor.Delete();
     windowManager.disposeWindow(window);
 
     return 0;

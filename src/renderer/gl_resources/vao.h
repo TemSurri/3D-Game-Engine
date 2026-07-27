@@ -18,7 +18,7 @@ public:
 	VAO& operator=(const VAO& other) = delete;
 
 	//create move contrsuctors
-	VAO(VAO& other) noexcept
+	VAO(VAO&& other) noexcept
 		:ID(other.ID)
 	{
 		other.ID = 0;
