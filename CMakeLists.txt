@@ -40,9 +40,15 @@ add_executable(GameEngine
  "src/renderer/renderer.cpp"
  "src/renderer/shader/shader.cpp"
  "src/renderer/gl_resources/ebo.cpp" "src/renderer/gl_resources/vao.cpp" "src/renderer/gl_resources/texture.cpp" "src/renderer/gl_resources/vbo.cpp"
- "src/renderer/model/mesh/mesh.cpp" "src/renderer/model/transform/transform.cpp"
- "src/renderer/model/model.cpp" "src/renderer/camera/camera.cpp"
- "src/renderer/model/mat/material.cpp")
+ "src/renderer/camera/camera.cpp"
+
+ "src/renderer/components/mesh/mesh.cpp"
+ "src/renderer/components/transform/transform.cpp"
+ "src/renderer/components/model/model.cpp" 
+ "src/renderer/components/mat/material.cpp"
+ "src/renderer/components/light/light.cpp"
+
+)
 
 target_include_directories(GameEngine PRIVATE
     ${CMAKE_SOURCE_DIR}

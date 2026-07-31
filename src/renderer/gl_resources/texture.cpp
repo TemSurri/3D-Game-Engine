@@ -9,6 +9,7 @@ void Tex::Create(const char* texFile) {
     }
 
     int widthT, heightT, numC;
+    stbi_set_flip_vertically_on_load(true);
     unsigned char* bytes = stbi_load(texFile, &widthT, &heightT, &numC, 4);
 
     if (!bytes)

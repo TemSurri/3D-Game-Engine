@@ -88,6 +88,7 @@ public:
 
     // set the uniform within the shader
     void setMat4(const std::string& name, const glm::mat4& matrix) const;
+    void setVec3(const std::string& name, const glm::vec3& vec) const;
     void setTex(const Tex& tex) const;
 
 private:

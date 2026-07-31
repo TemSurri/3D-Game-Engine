@@ -21,6 +21,8 @@ struct Vertex {
 	float u{};
 	float v{};
 
+	glm::vec3 normal{};
+
 };
 
 class Mesh {

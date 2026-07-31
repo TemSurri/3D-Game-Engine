@@ -1,6 +1,7 @@
 #pragma once
 #include "./camera/camera.h"
-#include "./model/model.h"
+#include "./components/model/model.h"
+#include "./components/light/light.h"
 #include <GLFW/glfw3.h>
 
 class Renderer {
@@ -12,5 +13,5 @@ class Renderer {
 		GLFWwindow* window = nullptr;
 
 		void renderModel(Model& model);
-		
+		void renderModel(Model& model, Light& light);
 };

@@ -74,6 +74,16 @@ void Mesh::initGLResources() {
         reinterpret_cast<void*>(offsetof(Vertex, u))
     );
 
+    //for normals
+    vao.LinkAttrib(
+        vbo,
+        3,
+        3,
+        GL_FLOAT,
+        sizeof(Vertex),
+        reinterpret_cast<void*>(offsetof(Vertex, normal.x))
+    );
+
     ebo.Upload(indices.data(), indices.size() * sizeof(unsigned int));
 
     vao.Unbind();

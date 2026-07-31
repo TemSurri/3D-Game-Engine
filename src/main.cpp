@@ -1,8 +1,9 @@
 #include "core/window_manager.h"
 #include "renderer/shader/shader.h"
-#include "renderer/model/model.h"
+#include "renderer/components/model/model.h"
 #include "renderer/camera/camera.h"
 #include "renderer/renderer.h"
+#include "renderer/components/light/light.h"
 #include <stb_image.h>
 
 int main()
@@ -15,6 +16,155 @@ int main()
     {
         return -1;
     }
+
+    // =====================================
+    // PYRAMID MESH
+    // =====================================
+
+    Mesh pyramidMesh;
+
+    glm::vec3 frontNormal{0.0f, 0.707f, 0.707f};
+    glm::vec3 rightNormal{ 0.707f, 0.707f, 0.0f };
+    glm::vec3 backNormal{ 0.0f, 0.707f, -0.707f };
+    glm::vec3 leftNormal{ -0.707f, 0.707f, 0.0f };
+    glm::vec3 bottomNormal{ 0.0f, -1.0f, 0.0f };
+
+
+    // FRONT
+    pyramidMesh.addVertex(Vertex{
+        -0.4f, -0.4f,  0.4f,
+         1.0f,  1.0f,  1.0f,
+         0.0f,  0.0f, frontNormal
+        });
+
+    pyramidMesh.addVertex(Vertex{
+         0.4f, -0.4f,  0.4f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  0.0f, frontNormal
+        });
+
+    pyramidMesh.addVertex(Vertex{
+         0.0f,  0.5f,  0.0f,
+         1.0f,  1.0f,  1.0f,
+         0.5f,  1.0f, frontNormal
+        });
+
+
+    // RIGHT
+    pyramidMesh.addVertex(Vertex{
+         0.4f, -0.4f,  0.4f,
+         1.0f,  1.0f,  1.0f,
+         0.0f,  0.0f, rightNormal
+        });
+
+    pyramidMesh.addVertex(Vertex{
+         0.4f, -0.4f, -0.4f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  0.0f, rightNormal
+        });
+
+    pyramidMesh.addVertex(Vertex{
+         0.0f,  0.5f,  0.0f,
+         1.0f,  1.0f,  1.0f,
+         0.5f,  1.0f, rightNormal
+        });
+
+
+    // BACK
+    pyramidMesh.addVertex(Vertex{
+         0.4f, -0.4f, -0.4f,
+         1.0f,  1.0f,  1.0f,
+         0.0f,  0.0f, backNormal
+        });
+
+    pyramidMesh.addVertex(Vertex{
+        -0.4f, -0.4f, -0.4f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  0.0f, backNormal
+        });
+
+    pyramidMesh.addVertex(Vertex{
+         0.0f,  0.5f,  0.0f,
+         1.0f,  1.0f,  1.0f,
+         0.5f,  1.0f, backNormal
+        });
+
+
+    // LEFT
+    pyramidMesh.addVertex(Vertex{
+        -0.4f, -0.4f, -0.4f,
+         1.0f,  1.0f,  1.0f,
+         0.0f,  0.0f, leftNormal
+        });
+
+    pyramidMesh.addVertex(Vertex{
+        -0.4f, -0.4f,  0.4f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  0.0f, leftNormal
+        });
+
+    pyramidMesh.addVertex(Vertex{
+         0.0f,  0.5f,  0.0f,
+         1.0f,  1.0f,  1.0f,
+         0.5f,  1.0f, leftNormal
+        });
+
+
+    // BOTTOM
+    pyramidMesh.addVertex(Vertex{
+        -0.4f, -0.4f,  0.4f,
+         1.0f,  1.0f,  1.0f,
+         0.0f,  0.0f, bottomNormal
+        });
+
+    pyramidMesh.addVertex(Vertex{
+         0.4f, -0.4f,  0.4f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  0.0f, bottomNormal
+        });
+
+    pyramidMesh.addVertex(Vertex{
+         0.4f, -0.4f, -0.4f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f, bottomNormal
+        });
+
+    pyramidMesh.addVertex(Vertex{
+        -0.4f, -0.4f, -0.4f,
+         1.0f,  1.0f,  1.0f,
+         0.0f,  1.0f, bottomNormal
+        });
+
+
+    // =====================================
+    // INDICES
+    // =====================================
+
+    // Four sides
+    pyramidMesh.addTriangle(0, 1, 2);
+    pyramidMesh.addTriangle(3, 4, 5);
+    pyramidMesh.addTriangle(6, 7, 8);
+    pyramidMesh.addTriangle(9, 10, 11);
+
+    // Bottom
+    pyramidMesh.addTriangle(12, 14, 13);
+    pyramidMesh.addTriangle(12, 15, 14);
+
+    pyramidMesh.initGLResources();
+
+
+    // =====================================
+    // PYRAMID TEXTURE
+    // =====================================
+
+    Tex meTex;
+
+    meTex.Create(
+        "resources/textures/me.jpg"
+    );
+
+
+ 
 
     Mesh m;
 
@@ -40,6 +190,8 @@ int main()
             float y = radius * cos(phi);
             float z = radius * sin(phi) * sin(theta);
 
+            glm::vec3 Normal{ x/radius , y / radius  , z / radius };
+
             Vertex vertex{
                 x, y, z,
 
@@ -47,7 +199,7 @@ int main()
                 1.0f, 1.0f, 1.0f,
 
                 // UV
-                u, v
+                u, v, Normal
             };
 
             m.addVertex(vertex);
@@ -110,10 +262,112 @@ int main()
 
 
     //putting everything together in Model
-    Model cube1 = Model();
+    Model cube1 = Model("meatball", 0);
+    //cube1.transform.scale = { 4,0.4,4 };
     cube1.mesh = &m;
     cube1.mat = &mat;
 
+
+    // =====================================
+    // PYRAMID MATERIAL
+    // =====================================
+
+    Material pyramidMat;
+
+    pyramidMat.shader = &texShader;
+    pyramidMat.texture = &meTex;
+
+
+    // =====================================
+    // PYRAMID MODEL
+    // =====================================
+
+    Model pyramid("Tem pyramid", 1);
+
+    pyramid.mesh = &pyramidMesh;
+    pyramid.mat = &pyramidMat;
+
+
+    // Put it beside the sphere
+    pyramid.transform.position.x = 1.2f;
+    pyramid.transform.position.y = 0.0f;
+    pyramid.transform.position.z = 0.0f;
+
+    // Rotate it slightly so you see multiple sides
+    pyramid.transform.rotation.y = 0.5f;
+
+
+    //-----------------------------------
+    //LIGHTING
+
+    //dir to the light source
+    Light lightSrc = Light(1.0f, 1.0f, 1.0f, 1.0f, POINT);
+   
+    Material lightMat;
+    Shader colorShader = Shader("renderer/shader/color.vert", "renderer/shader/color.frag");
+
+    lightMat.shader = &colorShader;
+    Model lightObj("light thing", 3);
+    
+   
+    lightSrc.transform.position.x = 2.5f;
+    lightSrc.transform.position.y = 2.5f;
+    lightSrc.transform.scale = {0.5f, 0.5f, 0.5f};
+    lightObj.transform = lightSrc.transform;
+    lightObj.mat = &lightMat;
+    //lightObj.mat->texture = &meTex;
+    lightObj.mesh = &m;
+
+
+    Tex naadTex;
+    naadTex.Create("resources/textures/naadam.jpg");
+    Material naadMat;
+    naadMat.texture = &naadTex;
+    naadMat.shader = &texShader;
+    
+    Mesh floorMesh;
+
+
+
+    //d
+    floorMesh.addVertex(Vertex{
+        -0.4f, -0.8f, -0.4f,
+        1.0f, 1.0f, 1.0f,
+        0.0f, 0.0f, {0,1,0} }
+        );
+    //c
+    floorMesh.addVertex(Vertex{
+       0.4f, -0.8f, -0.4f,
+       1.0f, 1.0f, 1.0f,
+       0.0f, 1.0f, {0,1,0} }
+       );
+    //b
+    floorMesh.addVertex(Vertex{
+       0.4f, -0.8f, 0.4f,
+       1.0f, 1.0f, 1.0f,
+       1.0f, 1.0f, {0,1,0} }
+       );
+    //
+    floorMesh.addVertex(Vertex{
+       -0.4f, -0.8f, 0.4f,
+       1.0f, 1.0f, 1.0f,
+       1.0f, 0.0f, {0,1,0} }
+       );
+      
+
+    floorMesh.addTriangle(
+        0, 1, 2
+    );
+    floorMesh.addTriangle(
+        0, 3, 2
+    );
+
+    floorMesh.initGLResources();
+
+    Model naadFloor("naadam floor", 4);
+    naadFloor.mat = &naadMat;
+    naadFloor.transform.scale = { 100, 1, 100 };
+    naadFloor.mesh = &floorMesh;
 
     glEnable(GL_DEPTH_TEST);
 
@@ -122,71 +376,40 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
-        
-        const float movementSpeed = 0.0005f;
-        const float rotateSpeed = 0.004f;
+        renderer.renderModel(pyramid, lightSrc);
+        renderer.renderModel(cube1, lightSrc);
+        renderer.renderModel(naadFloor, lightSrc);
+        renderer.renderModel(lightObj);
 
-        //rotation
-        if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
+
+        float movementSpeed = 0.003f;
+       
+        
+        if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
         {
-            cube1.transform.rotation.x += rotateSpeed;
+            lightSrc.transform.position.x += (movementSpeed);
+            lightObj.transform.position.x += (movementSpeed);
         }
+
         if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
         {
-            cube1.transform.rotation.y += rotateSpeed;
+            lightSrc.transform.position.x -= (movementSpeed);
+            lightObj.transform.position.x -= (movementSpeed);
         }
-        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+        if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
         {
-            cube1.transform.rotation.z += rotateSpeed;
+            lightSrc.transform.position.y += (movementSpeed);
+            lightObj.transform.position.y += (movementSpeed);
         }
 
-        // Camera movement
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
         {
-            cam.pos += cam.front * movementSpeed;
+            lightSrc.transform.position.y -= (movementSpeed);
+            lightObj.transform.position.y -= (movementSpeed);
         }
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        {
-            cam.pos -= cam.front * movementSpeed;
-        }
-        glm::vec3 right = glm::normalize(glm::cross(cam.front, cam.up));
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        {
-            cam.pos -= right * movementSpeed;
-        }
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        {
-            cam.pos += right * movementSpeed;
-        }
-        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        {
-            cam.pos += cam.up * movementSpeed;
-        }
-        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-        {
-            cam.pos -= cam.up * movementSpeed;
-        }
-        const float lookSpeed = 70.0f * 0.0002;
-        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-        {
-            cam.yaw -= lookSpeed;
-        }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-        {
-            cam.yaw += lookSpeed;
-        }
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-        {
-            cam.pitch += lookSpeed;
-        }
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        {
-            cam.pitch -= lookSpeed;
-        }
-        cam.pitch = glm::clamp(cam.pitch, -89.0f, 89.0f);
-        cam.updateDirection();
         
-        renderer.renderModel(cube1);
+
+        renderer.current_cam->inputs(window);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
