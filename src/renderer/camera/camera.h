@@ -46,6 +46,7 @@ class Camera {
 
 		glm::mat4 getViewMatrix() const;
 		glm::mat4 getProjectionMatrix(float aspectRatio) const;
+		glm::vec3 getPos() const;
 
 		
 		void updateDirection();

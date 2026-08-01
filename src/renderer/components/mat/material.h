@@ -11,5 +11,8 @@ class Material {
 		Shader* shader = nullptr;
 		Tex* texture = nullptr;
 
+		//if shininess is 0 then mat is not reflective so no need to calculate the specular light
+		float shininess{};
+		Tex* specular_map_tex = nullptr;
 
 };

@@ -1,5 +1,8 @@
 #include "camera.h"
 
+glm::vec3 Camera::getPos() const {
+    return pos;
+}
 
 glm::mat4 Camera::getViewMatrix() const
 {

@@ -167,8 +167,16 @@ void Renderer::renderModel(Model& model, Light& light) {
         {
                 light.getProps().color
         }
-
     );
+
+
+    model.mat->shader->setVec3(
+        "camPos",
+        {
+            current_cam->getPos()
+        }
+    );
+    
 
     //texture & draw
     // if no texture just draw 
