@@ -13,6 +13,14 @@ class Material {
 
 		//if shininess is 0 then mat is not reflective so no need to calculate the specular light
 		float shininess{};
+		float diffuse{};
+		float ambience = 0.15f;
+		float reflectiveness{};
+
 		Tex* specular_map_tex = nullptr;
+
+
+		void ApplyMaterial(const Shader& shader) const;
+
 
 };

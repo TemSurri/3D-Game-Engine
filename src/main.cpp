@@ -248,7 +248,9 @@ int main()
     //create Mat
     //owns tex and shader for a model
     Material mat;
-    Shader texShader = Shader("renderer/shader/tex.vert", "renderer/shader/tex.frag");
+    mat.shininess = 1.0f;
+    mat.diffuse = 3.0f;
+    Shader texShader = Shader("renderer/shader/mat_shaders/mat_single_light.vert", "renderer/shader/mat_shaders/mat_single_light.frag");
     mat.shader = &texShader;
     Tex fleshTex = Tex();
     fleshTex.Create("resources/textures/flesh.jpg");
@@ -276,7 +278,9 @@ int main()
 
     pyramidMat.shader = &texShader;
     pyramidMat.texture = &meTex;
-
+    pyramidMat.diffuse = 1.0f;
+    pyramidMat.shininess = 100.0f;
+    pyramidMat.reflectiveness = 105.0f;
 
     // =====================================
     // PYRAMID MODEL
@@ -304,9 +308,10 @@ int main()
     Light lightSrc = Light(1.0f, 1.0f, 1.0f, 1.0f, POINT);
    
     Material lightMat;
-    Shader colorShader = Shader("renderer/shader/color.vert", "renderer/shader/color.frag");
+    Shader colorShader = Shader("renderer/shader/mat_shaders/mat.vert", "renderer/shader/mat_shaders/mat.frag");
 
     lightMat.shader = &colorShader;
+    lightMat.texture = &meTex;
     Model lightObj("light thing", 3);
     
    
@@ -324,6 +329,9 @@ int main()
     Material naadMat;
     naadMat.texture = &naadTex;
     naadMat.shader = &texShader;
+    naadMat.diffuse = 0.13f;
+    naadMat.shininess = 1.0f;
+    naadMat.reflectiveness = 1.0f;
     
     Mesh floorMesh;
 

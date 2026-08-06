@@ -3,6 +3,8 @@
 
 void Renderer::renderModel(Model& model) {
 
+    //ERROR HANDLE FOR THE BASIC NEEDS TO RENDER
+
 	//no mat
 	if (!(model.mat)) {
         std::cout << "model has no material" << std::endl;
@@ -24,6 +26,8 @@ void Renderer::renderModel(Model& model) {
         return;
     }
 
+    //SET WINDOW SIZING 
+
     int framebufferWidth = 0;
     int framebufferHeight = 0;
 
@@ -33,6 +37,11 @@ void Renderer::renderModel(Model& model) {
         &framebufferHeight
     );
 
+
+    //SHADER SET UP
+
+
+    
     //setting up unforms ====================================================
     model.mesh->vao.Bind();
     model.mat->shader->Activate();
@@ -71,9 +80,12 @@ void Renderer::renderModel(Model& model) {
     //texture & draw
     // if no texture just draw 
     if (!(model.mat->texture)) {
+        model.mat->shader->setBool("isTextured", false);
         model.mesh->draw();
     }
     else {
+
+        model.mat->shader->setBool("isTextured", true);
 
         model.mat->texture->Bind();
 
@@ -85,10 +97,9 @@ void Renderer::renderModel(Model& model) {
     }
 }
 
-
 void Renderer::renderModel(Model& model, Light& light) {
 
-
+  
     //no mat
     if (!(model.mat)) {
         std::cout << "model has no material" << std::endl;
@@ -165,7 +176,7 @@ void Renderer::renderModel(Model& model, Light& light) {
     model.mat->shader->setVec3(
         "lightColor",
         {
-                light.getProps().color
+           light.getProps().color
         }
     );
 
@@ -176,15 +187,18 @@ void Renderer::renderModel(Model& model, Light& light) {
             current_cam->getPos()
         }
     );
-    
+
+
+    model.mat->ApplyMaterial(*(model.mat->shader));   
 
     //texture & draw
     // if no texture just draw 
     if (!(model.mat->texture)) {
+        model.mat->shader->setBool("isTextured", false);
         model.mesh->draw();
     }
     else {
-
+        model.mat->shader->setBool("isTextured", true);
         model.mat->texture->Bind();
 
         model.mat->shader->setTex(*(model.mat->texture));
@@ -194,13 +208,6 @@ void Renderer::renderModel(Model& model, Light& light) {
         model.mat->texture->UnBind();
     }
 
-
-
-
-
-
-
-
-
-
 }
+
+

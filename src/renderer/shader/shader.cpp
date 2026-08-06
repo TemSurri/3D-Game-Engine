@@ -43,8 +43,28 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile) {
 
     glLinkProgram(ID);
 
+    GLint success = 0;
+    glGetProgramiv(ID, GL_LINK_STATUS, &success);
+
+    if (!success)
+    {
+        char infoLog[1024]{};
+
+        glGetProgramInfoLog(
+            ID,
+            sizeof(infoLog),
+            nullptr,
+            infoLog
+        );
+
+        std::cerr << "Shader program linking failed:\n"
+            << infoLog << '\n';
+    }
+
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+
+    
 }
 
 void Shader::setMat4(const std::string& name, const glm::mat4& matrix
@@ -87,3 +107,27 @@ void Shader::setTex(const Tex& tex) const {
     
     
 };
+
+void Shader::setBool(const std::string& name, bool val) const {
+
+    GLint location = glGetUniformLocation(
+        ID,
+        name.c_str()
+    );
+
+    glUniform1i(location, val);
+
+
+}
+
+void Shader::setFloat(const std::string& name, float val) const {
+
+    GLint location = glGetUniformLocation(
+        ID,
+        name.c_str()
+    );
+
+    glUniform1f(location, val);
+
+
+}
