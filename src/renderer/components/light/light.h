@@ -6,6 +6,7 @@ struct LightProperties {
 	
 	glm::vec3 color;
 	float intensity{ 1.0f };
+	float radius = 10.0f;
 
 };
 
@@ -14,6 +15,7 @@ enum LightType :int {
 
 	POINT,
 	DIRECTIONAL,
+	SPOT
 
 };
 
@@ -27,12 +29,14 @@ class Light : public Thing {
 	public:
 		Light(float intensity, float r, float g, float b, LightType light_type);
 	
-		LightProperties getProps() {
+		LightProperties getProps() const {
 			return properties;
 		}
 
-		LightType getType() {
+		LightType getType() const {
 			return type;
 		}
+
+		//void ApplyToShader(const Shader& shader) const;
 
 };

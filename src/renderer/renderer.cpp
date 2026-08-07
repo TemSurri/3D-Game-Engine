@@ -165,7 +165,6 @@ void Renderer::renderModel(Model& model, Light& light) {
         model.transform.getModelMatrix()
     );
 
-
     //light pos
     model.mat->shader->setVec3(
         "lightPos",
@@ -188,6 +187,8 @@ void Renderer::renderModel(Model& model, Light& light) {
         }
     );
 
+    model.mat->shader->setFloat("lightStrength", light.getProps().intensity);
+    model.mat->shader->setFloat("radius", light.getProps().radius);
 
     model.mat->ApplyMaterial(*(model.mat->shader));   
 

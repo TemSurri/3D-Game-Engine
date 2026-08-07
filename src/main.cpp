@@ -248,8 +248,13 @@ int main()
     //create Mat
     //owns tex and shader for a model
     Material mat;
-    mat.shininess = 1.0f;
-    mat.diffuse = 3.0f;
+    mat.specStrength = 1.0f;
+    mat.diffuse = 1.0f;
+    mat.specPower = 32.0f;
+    mat.ambience = 0.15f;
+
+
+
     Shader texShader = Shader("renderer/shader/mat_shaders/mat_single_light.vert", "renderer/shader/mat_shaders/mat_single_light.frag");
     mat.shader = &texShader;
     Tex fleshTex = Tex();
@@ -278,9 +283,11 @@ int main()
 
     pyramidMat.shader = &texShader;
     pyramidMat.texture = &meTex;
-    pyramidMat.diffuse = 1.0f;
-    pyramidMat.shininess = 100.0f;
-    pyramidMat.reflectiveness = 105.0f;
+    pyramidMat.diffuse = 1.5f;
+    pyramidMat.specStrength = 24.0f;
+    pyramidMat.specPower = 33.4f;
+    pyramidMat.ambience = 0.5f;
+   
 
     // =====================================
     // PYRAMID MODEL
@@ -329,9 +336,11 @@ int main()
     Material naadMat;
     naadMat.texture = &naadTex;
     naadMat.shader = &texShader;
-    naadMat.diffuse = 0.13f;
-    naadMat.shininess = 1.0f;
-    naadMat.reflectiveness = 1.0f;
+    naadMat.diffuse = 1.0f;
+    naadMat.specStrength = 2.3f;
+    naadMat.specPower = 32.0f;
+    naadMat.ambience = 0.15f;
+ 
     
     Mesh floorMesh;
 
