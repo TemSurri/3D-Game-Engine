@@ -312,7 +312,9 @@ int main()
     //LIGHTING
 
     //dir to the light source
-    Light lightSrc = Light(1.0f, 1.0f, 1.0f, 1.0f, POINT);
+    Light lightSrc = Light(1.0f, 1.0f, 1.0f, 1.0f, SPOT);
+    glm::vec3 tr = glm::vec3(0, -1, 0);
+    lightSrc.transform.rotation = tr;
    
     Material lightMat;
     Shader colorShader = Shader("renderer/shader/mat_shaders/mat.vert", "renderer/shader/mat_shaders/mat.frag");
@@ -388,8 +390,35 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
+
+    double lastTime = glfwGetTime();
+    int frameCount = 0;
+    double fps = 0.0;
+
     while (!glfwWindowShouldClose(window))
     {
+
+
+
+        double currentTime = glfwGetTime();
+        frameCount++;
+
+        if (currentTime - lastTime >= 1.0)
+        {
+            fps = frameCount / (currentTime - lastTime);
+
+            frameCount = 0;
+            lastTime = currentTime;
+
+            std::cout << "FPS: " << fps << '\n';
+
+            glfwSetWindowTitle(
+                window,
+                ("My Engine | FPS: " + std::to_string((int)fps)).c_str()
+            );
+        }
+
+
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
@@ -404,13 +433,13 @@ int main()
         
         if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
         {
-            lightSrc.transform.position.x += (movementSpeed);
+            lightSrc.transform.rotation.x += (movementSpeed);
             lightObj.transform.position.x += (movementSpeed);
         }
 
         if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
         {
-            lightSrc.transform.position.x -= (movementSpeed);
+            lightSrc.transform.rotation.x -= (movementSpeed);
             lightObj.transform.position.x -= (movementSpeed);
         }
         if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)

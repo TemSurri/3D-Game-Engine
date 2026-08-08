@@ -23,6 +23,15 @@ uniform float diffuseStrength;
 uniform float specularStrength;
 uniform float specularPower;
 
+uniform bool isPointLight;
+uniform bool isDirectionalLight;
+uniform bool isSpotLight;
+
+uniform vec3 lightDirection;
+
+uniform float innerCutoff;
+uniform float outerCutoff;
+
 void main()
 {
     vec4 baseColor = vec4(vertexColor, 1.0);
@@ -32,15 +41,19 @@ void main()
         baseColor = texture(tex0, texCoord);
     }
 
+    vec3 lightDir;
+
+    if (isPointLight || isSpotLight)
+    {
+        lightDir = normalize(lightPos - FragPos);
+    }
+    else if (isDirectionalLight)
+    {
+        lightDir = normalize(-lightDirection);
+    }
+
     vec3 normal = normalize(FragNorm);
-    vec3 lightDir = normalize(lightPos - FragPos);
     vec3 viewDir = normalize(camPos - FragPos);
-
-    float distanceToLight = length(lightPos - FragPos);
-
-    float attenuation =
-        1.0 /
-        (1.0 + distanceToLight * distanceToLight / (radius * radius));
 
     // Diffuse angle
     float diffuseFactor =
@@ -77,8 +90,45 @@ void main()
         specularStrength *
         lightColor;
 
-    diffuse *= attenuation;
-    specular *= attenuation;
+
+    if (isSpotLight) {
+        float theta = dot(
+            normalize(FragPos - lightPos),
+            normalize(lightDirection)
+        );
+
+        float epsilon = max(innerCutoff - outerCutoff, 0.0001);
+
+        float spotIntensity = clamp(
+            (theta - outerCutoff) / epsilon,
+            0.0,
+            1.0
+        );
+
+        spotIntensity =
+            spotIntensity * spotIntensity * (3.0 - 2.0 * spotIntensity);
+
+
+        diffuse *= spotIntensity;
+        specular *= spotIntensity;
+
+    }
+
+
+    if (!isDirectionalLight) {
+
+        //calculating and applying distance attenutation
+
+        float distanceToLight = length(lightPos - FragPos);
+
+        float attenuation =
+            1.0 /
+            (1.0 + distanceToLight * distanceToLight / (radius * radius));
+
+        diffuse *= attenuation;
+        specular *= attenuation;
+
+    }
 
     // Light strength controls the actual light contribution
     vec3 lighting =

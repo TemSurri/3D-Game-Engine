@@ -1,5 +1,6 @@
 #pragma once
 #include "../thing/thing.h"
+#include "../../shader/shader.h"
 
 //basic properties of light: color and intensity
 struct LightProperties {
@@ -37,6 +38,6 @@ class Light : public Thing {
 			return type;
 		}
 
-		//void ApplyToShader(const Shader& shader) const;
+		void ApplyToShader(const Shader& shader) const;
 
 };

@@ -165,21 +165,6 @@ void Renderer::renderModel(Model& model, Light& light) {
         model.transform.getModelMatrix()
     );
 
-    //light pos
-    model.mat->shader->setVec3(
-        "lightPos",
-        light.transform.position
-    );
-
-    //light color
-    model.mat->shader->setVec3(
-        "lightColor",
-        {
-           light.getProps().color
-        }
-    );
-
-
     model.mat->shader->setVec3(
         "camPos",
         {
@@ -187,9 +172,9 @@ void Renderer::renderModel(Model& model, Light& light) {
         }
     );
 
-    model.mat->shader->setFloat("lightStrength", light.getProps().intensity);
-    model.mat->shader->setFloat("radius", light.getProps().radius);
-
+    //apply light info to shader
+    light.ApplyToShader(*(model.mat->shader));
+    //apply mat info to shader
     model.mat->ApplyMaterial(*(model.mat->shader));   
 
     //texture & draw
