@@ -8,7 +8,11 @@ in vec3 FragNorm;
 out vec4 FragColor;
 
 uniform bool isTextured;
+uniform bool isSpecularMap;
 uniform sampler2D tex0;
+uniform sampler2D tex1;
+
+uniform vec2 textureTiling;
 
 uniform vec3 lightPos;
 uniform vec3 lightColor;
@@ -29,6 +33,7 @@ uniform bool isSpotLight;
 
 uniform vec3 lightDirection;
 
+
 uniform float innerCutoff;
 uniform float outerCutoff;
 
@@ -38,7 +43,7 @@ void main()
 
     if (isTextured)
     {
-        baseColor = texture(tex0, texCoord);
+        baseColor = texture(tex0, texCoord * textureTiling);
     }
 
     vec3 lightDir;
@@ -85,11 +90,19 @@ void main()
         diffuseStrength *
         lightColor;
 
+
+
     vec3 specular =
         specularFactor *
         specularStrength *
         lightColor;
 
+
+    if (isSpecularMap)
+    {
+        float color = texture(tex1, texCoord * textureTiling).r;
+        specular *= color;
+    }
 
     if (isSpotLight) {
         float theta = dot(
@@ -130,14 +143,10 @@ void main()
 
     }
 
-    // Light strength controls the actual light contribution
-    vec3 lighting =
-        ambient +
-        (diffuse + specular) * lightStrength;
-
     // Same visual behavior as your original shader
     vec3 finalColor =
-        baseColor.rgb * lighting;
+        baseColor.rgb * (ambient + diffuse * lightStrength)
+        + specular * lightStrength;
 
     FragColor =
         vec4(finalColor, baseColor.a);

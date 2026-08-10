@@ -89,7 +89,7 @@ void Renderer::renderModel(Model& model) {
 
         model.mat->texture->Bind();
 
-        model.mat->shader->setTex(*(model.mat->texture));
+        model.mat->shader->setTex("tex0", 0);
 
         model.mesh->draw();
 
@@ -181,17 +181,52 @@ void Renderer::renderModel(Model& model, Light& light) {
     // if no texture just draw 
     if (!(model.mat->texture)) {
         model.mat->shader->setBool("isTextured", false);
+        model.mat->shader->setBool("isSpecularMap", false);
+
         model.mesh->draw();
+
+      
+
+
+
     }
     else {
+        glActiveTexture(GL_TEXTURE0);
         model.mat->shader->setBool("isTextured", true);
         model.mat->texture->Bind();
 
-        model.mat->shader->setTex(*(model.mat->texture));
+
+        if (model.mat->specular_map_tex)
+        {
+            model.mat->shader->setBool("isSpecularMap", true);
+
+            glActiveTexture(GL_TEXTURE1);
+            model.mat->specular_map_tex->Bind();
+
+            model.mat->shader->setTex("tex1", 1);
+        }
+        else
+        {
+            model.mat->shader->setBool("isSpecularMap", false);
+        }
+
+
+
+
+        model.mat->shader->setTex("tex0",  0);
 
         model.mesh->draw();
-
+        
+        glActiveTexture(GL_TEXTURE0);
         model.mat->texture->UnBind();
+
+
+        if (model.mat->specular_map_tex) {
+            glActiveTexture(GL_TEXTURE1);
+            model.mat->specular_map_tex->UnBind();
+        }
+
+
     }
 
 }

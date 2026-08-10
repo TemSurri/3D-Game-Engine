@@ -10,7 +10,7 @@ void Material::ApplyMaterial(const Shader& shader) const {
 		
 	shader.setFloat("diffuseStrength", diffuse);
 	
-
+	shader.setVec2("textureTiling", tiling);
 
 
 };

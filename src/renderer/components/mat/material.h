@@ -48,7 +48,7 @@ class Material {
 		
 
 		Tex* specular_map_tex = nullptr;
-
+		glm::vec2 tiling{ 1.0f, 1.0f };
 
 		void ApplyMaterial(const Shader& shader) const;
 

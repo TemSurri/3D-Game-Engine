@@ -12,7 +12,7 @@ class Tex {
 		~Tex() {
 			glDeleteTextures(1, &ID);
 		}
-
+		
 		//no copying
 		Tex(const Tex& other) = delete;
 		Tex& operator=(const Tex& other) = delete;

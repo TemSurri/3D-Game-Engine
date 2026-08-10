@@ -96,14 +96,28 @@ void Shader::setVec3(const std::string& name, const glm::vec3& vec
     );
 }
 
-void Shader::setTex(const Tex& tex) const {
+void Shader::setVec2(const std::string& name, const glm::vec2& vec) const {
+    const GLint location = glGetUniformLocation(
+        ID,
+        name.c_str()
+    );
+
+    glUniform2fv(
+        location,
+        1,
+        glm::value_ptr(vec)
+    );
+
+}
+
+void Shader::setTex(const std::string& name, int textureUnit) const {
 
     GLint location = glGetUniformLocation(
         ID,
-        "tex0"
+        name.c_str()
     );
 
-    glUniform1i(location, 0);
+    glUniform1i(location, textureUnit);
     
     
 };

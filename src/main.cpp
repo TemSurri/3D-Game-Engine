@@ -17,9 +17,8 @@ int main()
         return -1;
     }
 
-    // =====================================
     // PYRAMID MESH
-    // =====================================
+
 
     Mesh pyramidMesh;
 
@@ -136,9 +135,8 @@ int main()
         });
 
 
-    // =====================================
     // INDICES
-    // =====================================
+
 
     // Four sides
     pyramidMesh.addTriangle(0, 1, 2);
@@ -153,16 +151,20 @@ int main()
     pyramidMesh.initGLResources();
 
 
-    // =====================================
+
     // PYRAMID TEXTURE
-    // =====================================
+
 
     Tex meTex;
 
     meTex.Create(
-        "resources/textures/me.jpg"
+        "resources/textures/bri.jpg"
     );
-
+    
+    Tex meSpec;
+    meSpec.Create(
+        "resources/textures/bri_specmap.jpg"
+    );
 
  
 
@@ -248,9 +250,9 @@ int main()
     //create Mat
     //owns tex and shader for a model
     Material mat;
-    mat.specStrength = 1.0f;
+    mat.specStrength =2.0f;
     mat.diffuse = 1.0f;
-    mat.specPower = 32.0f;
+    mat.specPower = 8.0f;
     mat.ambience = 0.15f;
 
 
@@ -259,7 +261,7 @@ int main()
     mat.shader = &texShader;
     Tex fleshTex = Tex();
     fleshTex.Create("resources/textures/flesh.jpg");
-    mat.texture = &fleshTex;
+    //mat.texture = &fleshTex;
 
     //make renderer
     Renderer renderer = Renderer();
@@ -275,23 +277,21 @@ int main()
     cube1.mat = &mat;
 
 
-    // =====================================
+
     // PYRAMID MATERIAL
-    // =====================================
 
     Material pyramidMat;
 
     pyramidMat.shader = &texShader;
     pyramidMat.texture = &meTex;
-    pyramidMat.diffuse = 1.5f;
-    pyramidMat.specStrength = 24.0f;
-    pyramidMat.specPower = 33.4f;
-    pyramidMat.ambience = 0.5f;
+    pyramidMat.specular_map_tex = &meSpec;
+    pyramidMat.diffuse = 1.0f;
+    pyramidMat.specStrength = 6.0f;
+    pyramidMat.specPower = 18.0f;
+    pyramidMat.ambience = 0.15f;
    
 
-    // =====================================
     // PYRAMID MODEL
-    // =====================================
 
     Model pyramid("Tem pyramid", 1);
 
@@ -312,7 +312,8 @@ int main()
     //LIGHTING
 
     //dir to the light source
-    Light lightSrc = Light(1.0f, 1.0f, 1.0f, 1.0f, SPOT);
+    Light lightSrc = Light(0.4f, 1.0f, 1.0f, 1.0f, SPOT);
+    
     glm::vec3 tr = glm::vec3(0, -1, 0);
     lightSrc.transform.rotation = tr;
    
@@ -320,28 +321,35 @@ int main()
     Shader colorShader = Shader("renderer/shader/mat_shaders/mat.vert", "renderer/shader/mat_shaders/mat.frag");
 
     lightMat.shader = &colorShader;
-    lightMat.texture = &meTex;
+    
     Model lightObj("light thing", 3);
     
    
     lightSrc.transform.position.x = 2.5f;
     lightSrc.transform.position.y = 2.5f;
-    lightSrc.transform.scale = {0.5f, 0.5f, 0.5f};
+    lightSrc.transform.scale = {0.2f, 0.2f, 0.2f};
     lightObj.transform = lightSrc.transform;
     lightObj.mat = &lightMat;
     //lightObj.mat->texture = &meTex;
     lightObj.mesh = &m;
 
+    Tex specMap;
+    specMap.Create("resources/textures/tile_specmap4k.jpg");
+
+
 
     Tex naadTex;
-    naadTex.Create("resources/textures/naadam.jpg");
+    naadTex.Create("resources/textures/tile4k.jpg");
     Material naadMat;
     naadMat.texture = &naadTex;
     naadMat.shader = &texShader;
-    naadMat.diffuse = 1.0f;
-    naadMat.specStrength = 2.3f;
-    naadMat.specPower = 32.0f;
-    naadMat.ambience = 0.15f;
+
+    naadMat.specular_map_tex = &specMap;
+
+    naadMat.diffuse = 3.0f;
+    naadMat.specStrength = 6.3f;
+    naadMat.specPower = 18.0f;
+    naadMat.ambience = 0.03f;
  
     
     Mesh floorMesh;
@@ -383,8 +391,15 @@ int main()
 
     floorMesh.initGLResources();
 
+
+
+
+
+
+
     Model naadFloor("naadam floor", 4);
     naadFloor.mat = &naadMat;
+    naadFloor.mat->tiling = { 100,100 };
     naadFloor.transform.scale = { 100, 1, 100 };
     naadFloor.mesh = &floorMesh;
 

@@ -89,7 +89,8 @@ public:
     // set the uniform within the shader
     void setMat4(const std::string& name, const glm::mat4& matrix) const;
     void setVec3(const std::string& name, const glm::vec3& vec) const;
-    void setTex(const Tex& tex) const;
+    void setVec2(const std::string& name, const glm::vec2& vec) const;
+    void setTex(const std::string& name, int textureUnit) const;
     void setBool(const std::string& name, bool val) const;
     void setFloat(const std::string& name, float val) const;
 

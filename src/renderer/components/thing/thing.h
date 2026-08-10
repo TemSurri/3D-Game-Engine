@@ -6,11 +6,9 @@
 // thing repreents the most basic entity it simply has a transform that represents its geometry in 3d space
 class Thing {
 
-	protected:
+	public:
 		std::string name;
 		int id{};
-
-	public:
 		Transform transform;
 
 		Thing(std::string name, int id) 
