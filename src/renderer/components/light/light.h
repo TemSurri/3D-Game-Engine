@@ -7,7 +7,7 @@ struct LightProperties {
 	
 	glm::vec3 color;
 	float intensity{ 1.0f };
-	float radius = 10.0f;
+	float radius = 5.0f;
 
 };
 

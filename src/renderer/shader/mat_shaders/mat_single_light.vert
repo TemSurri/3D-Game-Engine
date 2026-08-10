@@ -23,6 +23,6 @@ void main()
     texCoord = aTex;
 
     
-    FragNorm = aNorm;
+    FragNorm = vec3(mat3(transpose(inverse(model))) * aNorm);
     FragPos = vec3(model * vec4(aPosition, 1.0));
 }

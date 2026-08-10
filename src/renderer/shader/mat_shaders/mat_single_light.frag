@@ -33,7 +33,6 @@ uniform bool isSpotLight;
 
 uniform vec3 lightDirection;
 
-
 uniform float innerCutoff;
 uniform float outerCutoff;
 
@@ -100,8 +99,9 @@ void main()
 
     if (isSpecularMap)
     {
-        float color = texture(tex1, texCoord * textureTiling).r;
-        specular *= color;
+        float gradient = texture(tex1, texCoord * textureTiling).r;
+        specular *= gradient;
+        diffuse *= gradient;
     }
 
     if (isSpotLight) {

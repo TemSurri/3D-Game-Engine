@@ -250,9 +250,9 @@ int main()
     //create Mat
     //owns tex and shader for a model
     Material mat;
-    mat.specStrength =2.0f;
-    mat.diffuse = 1.0f;
-    mat.specPower = 8.0f;
+    mat.specStrength =1.0f;
+    mat.diffuse = 1.5f;
+    mat.specPower = 4.0f;
     mat.ambience = 0.15f;
 
 
@@ -286,9 +286,9 @@ int main()
     pyramidMat.texture = &meTex;
     pyramidMat.specular_map_tex = &meSpec;
     pyramidMat.diffuse = 1.0f;
-    pyramidMat.specStrength = 6.0f;
-    pyramidMat.specPower = 18.0f;
-    pyramidMat.ambience = 0.15f;
+    pyramidMat.specStrength = 5.0f;
+    pyramidMat.specPower = 16.0f;
+    pyramidMat.ambience = 0.5f;
    
 
     // PYRAMID MODEL
@@ -312,10 +312,11 @@ int main()
     //LIGHTING
 
     //dir to the light source
-    Light lightSrc = Light(0.4f, 1.0f, 1.0f, 1.0f, SPOT);
+    Light lightSrc = Light(0.4f, 1.0f, 1.0f, 1.0f, POINT);
     
     glm::vec3 tr = glm::vec3(0, -1, 0);
     lightSrc.transform.rotation = tr;
+  
    
     Material lightMat;
     Shader colorShader = Shader("renderer/shader/mat_shaders/mat.vert", "renderer/shader/mat_shaders/mat.frag");
@@ -347,8 +348,8 @@ int main()
     naadMat.specular_map_tex = &specMap;
 
     naadMat.diffuse = 3.0f;
-    naadMat.specStrength = 6.3f;
-    naadMat.specPower = 18.0f;
+    naadMat.specStrength = 1.0f;
+    naadMat.specPower = 12.0f;
     naadMat.ambience = 0.03f;
  
     
@@ -393,8 +394,11 @@ int main()
 
 
 
+    Tex orgil = Tex();
+    orgil.Create("resources/textures/buss.jpg");
 
-
+    mat.texture = &orgil;
+    cube1.transform.rotation = { 1.0f, 0.0f, 0.0f };
 
 
     Model naadFloor("naadam floor", 4);
@@ -448,13 +452,13 @@ int main()
         
         if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
         {
-            lightSrc.transform.rotation.x += (movementSpeed);
-            lightObj.transform.position.x += (movementSpeed);
+            cube1.transform.rotation.x += (movementSpeed);
+            cube1.transform.position.x += (movementSpeed);
         }
 
         if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
         {
-            lightSrc.transform.rotation.x -= (movementSpeed);
+            lightSrc.transform.position.x -= (movementSpeed);
             lightObj.transform.position.x -= (movementSpeed);
         }
         if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
