@@ -62,8 +62,8 @@ void Light::ApplyToShader(const Shader& shader) const {
 		shader.setFloat("radius", properties.radius);
 		shader.setVec3("lightDirection", transform.rotation);
 
-		shader.setFloat("innerCutoff", glm::cos(glm::radians(12.5f)));
-		shader.setFloat("outerCutoff", glm::cos(glm::radians(17.5f)));
+		shader.setFloat("innerCutoff", properties.innerCutoff);
+		shader.setFloat("outerCutoff", properties.outerCutoff);
 
 		break;
 

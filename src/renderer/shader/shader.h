@@ -4,8 +4,12 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 
+#include "../camera/camera.h"
 #include "../gl_resources/texture.h"
+
+class Light;
 
 class Shader
 {
@@ -93,6 +97,10 @@ public:
     void setTex(const std::string& name, int textureUnit) const;
     void setBool(const std::string& name, bool val) const;
     void setFloat(const std::string& name, float val) const;
+    void setInt(const std::string& name, int val) const;
+
+    void applySceneLights(const std::vector<Light*>& lights) const;
+    void applySceneCamera(const Camera& camera, GLFWwindow* window) const;
 
 private:
     static std::string readFile(const char* filepath);

@@ -3,6 +3,8 @@
 #include <sstream>
 #include <iostream>
 
+#include "../components/light/light.h"
+
 std::string Shader::readFile(const char* filepath)
 {
     std::ifstream file(filepath);
@@ -145,3 +147,127 @@ void Shader::setFloat(const std::string& name, float val) const {
 
 
 }
+
+void Shader::setInt(const std::string& name, int val) const {
+
+    GLint location = glGetUniformLocation(
+        ID,
+        name.c_str()
+    );
+
+    glUniform1i(location, val);
+
+
+}
+
+
+void Shader::applySceneLights(const std::vector<Light*>& lights) const {
+    constexpr int MAX_LIGHTS = 16;
+
+    int count = std::min(
+        static_cast<int>(lights.size()),
+        MAX_LIGHTS
+    );
+
+    setInt("light_count", count);
+
+    for (int i = 0; i < count; i++)
+    {
+        auto light = lights[i];
+
+        std::string base = "lights[" + std::to_string(i) + "]";
+
+        setInt(
+            base + ".type",
+            static_cast<int>(light->getType())
+        );
+
+        setVec3(
+            base + ".pos",
+            light->transform.position
+        );
+
+        setVec3(
+            base + ".dir",
+            light->transform.rotation // if this is actually your direction
+        );
+
+        auto light_props = light->getProps();
+
+
+        setFloat(
+            base + ".intensity",
+            light_props.intensity
+        );
+
+        setFloat(
+            base + ".radius",
+            light_props.radius
+        );
+
+        setVec3(
+            base + ".color",
+            light_props.color
+        );
+
+        setFloat(
+            base + ".innerCutoff",
+            light_props.innerCutoff
+        );
+
+        setFloat(
+            base + ".outerCutoff",
+            light_props.outerCutoff
+        );
+
+        
+    }
+
+
+
+};
+
+
+void Shader::applySceneCamera(const Camera& camera, GLFWwindow* window) const {
+    int framebufferWidth = 0;
+    int framebufferHeight = 0;
+
+    glfwGetFramebufferSize(
+        window,
+        &framebufferWidth,
+        &framebufferHeight
+    );
+
+    //setting the projection matrix unifrom
+    if (framebufferWidth > 0 && framebufferHeight > 0)
+    {
+        glViewport(
+            0,
+            0,
+            framebufferWidth,
+            framebufferHeight
+        );
+
+        const float aspectRatio =
+            static_cast<float>(framebufferWidth) /
+            static_cast<float>(framebufferHeight);
+
+        setMat4(
+            "proj",
+            camera.getProjectionMatrix(aspectRatio)
+        );
+    }
+
+    //setting the view matrix unifrom
+    setMat4(
+        "view", camera.getViewMatrix()
+    );
+
+    setVec3(
+        "camPos",
+        {
+            camera.getPos()
+        }
+    );
+
+};

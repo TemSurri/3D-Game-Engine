@@ -9,6 +9,9 @@ struct LightProperties {
 	float intensity{ 1.0f };
 	float radius = 5.0f;
 
+	float innerCutoff = glm::cos(glm::radians(10.0f));
+	float outerCutoff = glm::cos(glm::radians(25.0f));
+
 };
 
 //type of lights, renderer will implement lighting depending on type

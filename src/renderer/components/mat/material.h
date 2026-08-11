@@ -51,6 +51,7 @@ class Material {
 		glm::vec2 tiling{ 1.0f, 1.0f };
 
 		void ApplyMaterial(const Shader& shader) const;
+		void Bind(const Shader& shader) const;
 
 
 };
