@@ -8,6 +8,7 @@
 
 #include "../camera/camera.h"
 #include "../gl_resources/texture.h"
+#include "../components/model/model.h"
 
 class Light;
 
@@ -101,6 +102,7 @@ public:
 
     void applySceneLights(const std::vector<Light*>& lights) const;
     void applySceneCamera(const Camera& camera, GLFWwindow* window) const;
+    void applyModelMat(const Model& model) const;
 
 private:
     static std::string readFile(const char* filepath);

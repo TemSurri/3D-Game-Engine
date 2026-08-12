@@ -21,11 +21,11 @@ class Renderer {
 	public:	
 		Renderer() {};
 
-		Camera* current_cam = nullptr;
 		GLFWwindow* window = nullptr;
 
-		void renderModel(Model& model);
-		void renderModel(Model& model, Light& light);
+		// renders model from scene
 		void renderSceneModel(Model& model) const;
+
+		// renders scene
 		void renderScene(Scene& scene) const;
 };

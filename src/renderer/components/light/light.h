@@ -41,6 +41,4 @@ class Light : public Thing {
 			return type;
 		}
 
-		void ApplyToShader(const Shader& shader) const;
-
 };

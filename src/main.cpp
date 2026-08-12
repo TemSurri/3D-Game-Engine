@@ -293,15 +293,9 @@ int main()
 
     //shaders
     Shader lightingShader(
-        "renderer/shader/mat_shaders/mat_single_light.vert",
+        "renderer/shader/mat_shaders/mat_multi_light.vert",
         "renderer/shader/mat_shaders/mat_multi_light.frag"
     );
-
-    Shader colorShader(
-        "renderer/shader/mat_shaders/mat.vert",
-        "renderer/shader/mat_shaders/mat.frag"
-    );
-
 
     //textures
     Tex floorTexture;
@@ -340,8 +334,8 @@ int main()
     floorMat.diffuse = 1.5f;
     floorMat.specStrength = 2.5f;
     floorMat.specPower = 24.0f;
-    floorMat.ambience = 0.04f;
-    floorMat.tiling = { 30.0f, 30.0f };
+    floorMat.ambience = 1.04f;
+    floorMat.tiling = { 1.0f, 1.0f };
 
 
     //pyramid mat
@@ -365,321 +359,35 @@ int main()
     sphereMat.diffuse = 1.2f;
     sphereMat.specStrength = 5.0f;
     sphereMat.specPower = 32.0f;
-    sphereMat.ambience = 0.06f;
+    sphereMat.ambience = 1.06f;
 
+    
 
-    //light mat
-    Material lightMat;
-    lightMat.shader = &colorShader;
-
-
-    //floor
-    Model floor("floor", 0);
-
+    //models
+    Model floor{"tiled floor", 1};
     floor.mesh = &floorMesh;
     floor.mat = &floorMat;
 
-    floor.transform.position = {
-        0.0f,
-        -1.0f,
-        0.0f
-    };
-
-    floor.transform.scale = {
-        20.0f,
-        1.0f,
-        20.0f
-    };
-
-
-    //center sphere
-    Model centerSphere("center sphere", 1);
-
-    centerSphere.mesh = &sphereMesh;
-    centerSphere.mat = &sphereMat;
-
-    centerSphere.transform.position = {
-        0.0f,
-        0.0f,
-        0.0f
-    };
-
-    centerSphere.transform.scale = {
-        1.5f,
-        1.5f,
-        1.5f
-    };
-
-
-    //left sphere
-    Model leftSphere("left sphere", 2);
-
-    leftSphere.mesh = &sphereMesh;
-    leftSphere.mat = &sphereMat;
-
-    leftSphere.transform.position = {
-        -2.5f,
-        -0.25f,
-        -1.0f
-    };
-
-
-    //right sphere
-    Model rightSphere("right sphere", 3);
-
-    rightSphere.mesh = &sphereMesh;
-    rightSphere.mat = &sphereMat;
-
-    rightSphere.transform.position = {
-        2.7f,
-        -0.25f,
-        -0.5f
-    };
-
-    rightSphere.transform.scale = {
-        0.8f,
-        0.8f,
-        0.8f
-    };
-
-
-    //left pyramid
-    Model leftPyramid("left pyramid", 4);
-
-    leftPyramid.mesh = &pyramidMesh;
-    leftPyramid.mat = &pyramidMat;
-
-    leftPyramid.transform.position = {
-        -1.8f,
-        -0.4f,
-        2.0f
-    };
-
-
-    //right pyramid
-    Model rightPyramid("right pyramid", 5);
-
-    rightPyramid.mesh = &pyramidMesh;
-    rightPyramid.mat = &pyramidMat;
-
-    rightPyramid.transform.position = {
-        2.0f,
-        -0.4f,
-        2.2f
-    };
-
-    rightPyramid.transform.scale = {
-        1.4f,
-        1.4f,
-        1.4f
-    };
-
-
-    //back pyramid
-    Model backPyramid("back pyramid", 6);
-
-    backPyramid.mesh = &pyramidMesh;
-    backPyramid.mat = &pyramidMat;
-
-    backPyramid.transform.position = {
-        0.0f,
-        -0.4f,
-        -3.0f
-    };
-
-    backPyramid.transform.scale = {
-        0.8f,
-        1.8f,
-        0.8f
-    };
-
-
-    //small sphere
-    Model smallSphere("small sphere", 7);
-
-    smallSphere.mesh = &sphereMesh;
-    smallSphere.mat = &sphereMat;
-
-    smallSphere.transform.scale = {
-        0.45f,
-        0.45f,
-        0.45f
-    };
-
-
-    //warm point light
-    Light warmPoint(
-        1.8f,
-        1.0f,
-        0.45f,
-        0.15f,
-        POINT
-    );
-
-    warmPoint.transform.position = {
-        3.0f,
-        2.0f,
-        0.0f
-    };
-
-
-    //blue point light
-    Light bluePoint(
-        1.5f,
-        0.1f,
-        0.3f,
-        1.0f,
-        POINT
-    );
-
-    bluePoint.transform.position = {
-        -3.0f,
-        1.5f,
-        0.0f
-    };
-
-
-    //green point light
-    Light greenPoint(
-        1.1f,
-        0.1f,
-        1.0f,
-        0.35f,
-        POINT
-    );
-
-    greenPoint.transform.position = {
-        0.0f,
-        1.0f,
-        -4.0f
-    };
-
-
-    //spot light
-    Light spotLight(
-        2.4f,
-        1.0f,
-        0.9f,
-        0.65f,
-        SPOT
-    );
-
-    spotLight.transform.position = {
-        0.0f,
-        4.5f,
-        0.0f
-    };
-
-    //rotation is acting as dir for now
-    spotLight.transform.rotation = {
-        0.0f,
-        -1.0f,
-        0.0f
-    };
-
-
-    //directional light
-    Light directionalLight(
-        0.20f,
-        0.45f,
-        0.55f,
-        0.8f,
-        DIRECTIONAL
-    );
-
-    directionalLight.transform.rotation = {
-        -0.5f,
-        -1.0f,
-        -0.25f
-    };
-
-
-    //light objs
-    Model warmLightObj("warm light obj", 10);
-
-    warmLightObj.mesh = &sphereMesh;
-    warmLightObj.mat = &lightMat;
-
-    warmLightObj.transform.scale = {
-        0.13f,
-        0.13f,
-        0.13f
-    };
-
-
-    Model blueLightObj("blue light obj", 11);
-
-    blueLightObj.mesh = &sphereMesh;
-    blueLightObj.mat = &lightMat;
-
-    blueLightObj.transform.scale = {
-        0.13f,
-        0.13f,
-        0.13f
-    };
-
-
-    Model greenLightObj("green light obj", 12);
-
-    greenLightObj.mesh = &sphereMesh;
-    greenLightObj.mat = &lightMat;
-
-    greenLightObj.transform.scale = {
-        0.13f,
-        0.13f,
-        0.13f
-    };
-
-
-    Model spotLightObj("spot light obj", 13);
-
-    spotLightObj.mesh = &sphereMesh;
-    spotLightObj.mat = &lightMat;
-
-    spotLightObj.transform.scale = {
-        0.16f,
-        0.16f,
-        0.16f
-    };
-
+    //lights
+    Light l1{1.0f,1.0f,1.0f,1.0f, POINT};
+    l1.transform.position = { 1.0, 1.0, 1.0 };
+    
+    Model lo{ "light obj", 2 };
+    lo.mat = &sphereMat;
+    lo.mesh = &sphereMesh;
+   
+    lo.transform = l1.transform;
 
     //scene
     Scene scene;
-
     scene.current_cam = &cam;
-
-
-    //lights
-    scene.lights.push_back(&warmPoint);
-    scene.lights.push_back(&bluePoint);
-    scene.lights.push_back(&greenPoint);
-    scene.lights.push_back(&spotLight);
-    scene.lights.push_back(&directionalLight);
-
-
-    //models
+    scene.models.push_back(&lo);
     scene.models.push_back(&floor);
-
-    scene.models.push_back(&centerSphere);
-    scene.models.push_back(&leftSphere);
-    scene.models.push_back(&rightSphere);
-    scene.models.push_back(&smallSphere);
-
-    scene.models.push_back(&leftPyramid);
-    scene.models.push_back(&rightPyramid);
-    scene.models.push_back(&backPyramid);
-
-    //same resources beside each other
-    scene.models.push_back(&warmLightObj);
-    scene.models.push_back(&blueLightObj);
-    scene.models.push_back(&greenLightObj);
-    scene.models.push_back(&spotLightObj);
-
+    scene.lights.push_back(&l1);
 
     //renderer
     Renderer renderer;
 
-    renderer.current_cam = &cam;
     renderer.window = window;
 
     glEnable(GL_DEPTH_TEST);
@@ -751,103 +459,6 @@ int main()
             GL_DEPTH_BUFFER_BIT
         );
 
-
-        //move warm light around scene
-        warmPoint.transform.position = {
-            cos(t * 0.75f) * 3.5f,
-            1.8f + sin(t * 1.4f) * 0.5f,
-            sin(t * 0.75f) * 3.5f
-        };
-
-
-        //blue light goes around the other way
-        bluePoint.transform.position = {
-            cos(-t * 0.55f) * 4.0f,
-            1.2f + sin(t * 0.7f) * 0.3f,
-            sin(-t * 0.55f) * 4.0f
-        };
-
-
-        //green light moves around the back
-        greenPoint.transform.position = {
-            sin(t * 0.8f) * 2.0f,
-            0.8f + sin(t * 1.7f) * 1.0f,
-            -3.5f + cos(t * 0.5f)
-        };
-
-
-        //spot light moves over everything
-        spotLight.transform.position = {
-            sin(t * 0.45f) * 2.5f,
-            4.5f,
-            cos(t * 0.30f) * 1.5f
-        };
-
-
-        //make spot always look around center
-        spotLight.transform.rotation =
-            glm::normalize(
-                glm::vec3(
-                    sin(t * 0.35f) * 1.5f,
-                    0.0f,
-                    cos(t * 0.35f) * 1.5f
-                )
-                -
-                spotLight.transform.position
-            );
-
-
-        //make the little light objs follow the lights
-        warmLightObj.transform.position =
-            warmPoint.transform.position;
-
-        blueLightObj.transform.position =
-            bluePoint.transform.position;
-
-        greenLightObj.transform.position =
-            greenPoint.transform.position;
-
-        spotLightObj.transform.position =
-            spotLight.transform.position;
-
-
-        //float center sphere
-        centerSphere.transform.position.y =
-            0.15f +
-            sin(t * 1.3f) * 0.35f;
-
-
-        //left sphere circles center
-        leftSphere.transform.position = {
-            cos(t * 0.65f) * 2.6f,
-            -0.25f,
-            sin(t * 0.65f) * 2.6f
-        };
-
-
-        //right sphere circles opposite way
-        rightSphere.transform.position = {
-            cos(-t * 0.45f) * 3.2f,
-            -0.25f + sin(t * 1.2f) * 0.2f,
-            sin(-t * 0.45f) * 3.2f
-        };
-
-
-        //small sphere goes around the floating center sphere
-        smallSphere.transform.position = {
-            centerSphere.transform.position.x +
-                cos(t * 1.8f) * 1.3f,
-
-            centerSphere.transform.position.y +
-                sin(t * 1.4f) * 0.6f,
-
-            centerSphere.transform.position.z +
-                sin(t * 1.8f) * 1.3f
-        };
-
-
-
-       
 
         //camera input
         cam.inputs(window);

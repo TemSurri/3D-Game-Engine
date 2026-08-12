@@ -45,8 +45,9 @@ add_executable(GameEngine
  "src/renderer/components/mesh/mesh.cpp"
  "src/renderer/components/transform/transform.cpp"
  "src/renderer/components/model/model.cpp" 
- "src/renderer/components/mat/material.cpp"
+ 
  "src/renderer/components/light/light.cpp"
+ "src/resource_manager/resource_manager.cpp"
 
 )
 

@@ -161,6 +161,7 @@ void Shader::setInt(const std::string& name, int val) const {
 }
 
 
+
 void Shader::applySceneLights(const std::vector<Light*>& lights) const {
     constexpr int MAX_LIGHTS = 16;
 
@@ -227,7 +228,6 @@ void Shader::applySceneLights(const std::vector<Light*>& lights) const {
 
 };
 
-
 void Shader::applySceneCamera(const Camera& camera, GLFWwindow* window) const {
     int framebufferWidth = 0;
     int framebufferHeight = 0;
@@ -271,3 +271,37 @@ void Shader::applySceneCamera(const Camera& camera, GLFWwindow* window) const {
     );
 
 };
+
+void Shader::applyModelMat(const Model& model) const {
+
+    setFloat("ambientStrength", model.mat->ambience);
+
+    setFloat("specularPower", model.mat->specPower);
+
+    setFloat("specularStrength", model.mat->specStrength);
+
+    setFloat("diffuseStrength", model.mat->diffuse);
+
+    setVec2("textureTiling", model.mat->tiling);
+
+    setBool("isTextured", model.mat->texture != nullptr);
+
+    setBool("isSpecularMap", model.mat->specular_map_tex != nullptr);
+
+    if (model.mat->texture)
+    {
+        glActiveTexture(GL_TEXTURE0);
+        model.mat->texture->Bind();
+        setTex("tex0", 0);
+    }
+
+    if (model.mat->specular_map_tex)
+    {
+        glActiveTexture(GL_TEXTURE1);
+        model.mat->specular_map_tex->Bind();
+        setTex("tex1", 1);
+    }
+
+
+}
+

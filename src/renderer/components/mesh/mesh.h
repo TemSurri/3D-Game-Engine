@@ -6,8 +6,9 @@
 #include "../../gl_resources/ebo.h"
 #include "../../gl_resources/vbo.h"
 #include "../../gl_resources/vao.h"
-#include "../../shader/shader.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 struct Vertex {
 	float x{};
